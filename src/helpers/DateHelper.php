@@ -82,8 +82,17 @@ class DateHelper
         }
     }
 
+    /**
+     * @param array $config
+     * @return false|int|string
+     * @throws \Exception
+     */
     public static function now($config = []){
-        return (new self($config))->result();
+        try{
+            return (new self($config))->result();
+        }catch (\Exception $e) {
+            throw new \Exception('错误');
+        }
     }
 
     private function setValue($name,$val){
