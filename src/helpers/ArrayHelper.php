@@ -1,6 +1,6 @@
 <?php
 
-namespace lwy\helpers;
+namespace lwyhelper\helpers;
 
 /**
  * ArrayHelper provides additional array functionality that you can use in your

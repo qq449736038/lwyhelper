@@ -1,7 +1,7 @@
 <?php
 
 
-namespace lwy\helpers;
+namespace lwyhelper\helpers;
 
 use InvalidArgumentException;
 use RuntimeException;

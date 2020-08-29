@@ -1,5 +1,5 @@
 <?php
-namespace lwy\helpers;
+namespace lwyhelper\helpers;
 
 
 interface Arrayable
