@@ -1,0 +1,18 @@
+{
+    "name": "liwanyuan/lwyhelper",
+    "description": "a helper for date or array or others",
+    "type": "library",
+    "authors": [
+        {
+            "name": "liwanyuan",
+            "email": "449736038@qq.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "lwy\\": "src/"
+        }
+    }
+}
