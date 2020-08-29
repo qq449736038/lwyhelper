@@ -67,9 +67,14 @@ class DateHelper
      */
     public function __construct($config = []){
         if(is_array($config)){
-            foreach ($config as $key => $val){
-                $this->setValue($key,$val);
+            try {
+                foreach ($config as $key => $val){
+                    $this->setValue($key,$val);
+                }
+            }catch (\RuntimeException $e){
+                throw new \Exception($e->getMessage());
             }
+
             //如果没有传入时间戳配置，默认当前时间
             if($this->timestamp  == 0){
                 $this->timestamp = time();
