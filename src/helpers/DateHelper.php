@@ -71,7 +71,7 @@ class DateHelper
                 foreach ($config as $key => $val){
                     $this->setValue($key,$val);
                 }
-            }catch (\RuntimeException $e){
+            }catch (\Exception $e){
                 throw new \Exception($e->getMessage());
             }
 
@@ -102,7 +102,7 @@ class DateHelper
 
     private function setValue($name,$val){
         if(!property_exists($this,$name)){
-            throw new RuntimeException("trying to set unknown property '{$name}'");
+            throw new \Exception("trying to set unknown property '{$name}'");
             //throw new \Exception("trying to set unknown property '{$name}'");
         }
         $this->$name = $val;
