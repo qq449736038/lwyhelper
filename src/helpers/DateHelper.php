@@ -4,7 +4,6 @@
 namespace lwyhelper\helpers;
 
 use InvalidArgumentException;
-use RuntimeException;
 
 class DateHelper
 {
@@ -71,7 +70,7 @@ class DateHelper
                 foreach ($config as $key => $val){
                     $this->setValue($key,$val);
                 }
-            }catch (\Exception $e){
+            }catch (\InvalidArgumentException $e){
                 throw new \Exception($e->getMessage());
             }
 
@@ -82,7 +81,6 @@ class DateHelper
         }elseif(is_numeric($config)){
             $this->timestamp = $config;
         }else{
-            //throw new \Exception('config param except ArrayHelper but give one '.gettype($config));
             throw new InvalidArgumentException('config param except ArrayHelper but give one '.gettype($config));
         }
     }
@@ -95,15 +93,14 @@ class DateHelper
     public static function now($config = []){
         try{
             return (new self($config))->result();
-        }catch (\Exception $e) {
-            throw new \Exception('错误');
+        }catch (\InvalidArgumentException $e) {
+            throw new \InvalidArgumentException('错误');
         }
     }
 
     private function setValue($name,$val){
         if(!property_exists($this,$name)){
-            throw new \Exception("trying to set unknown property '{$name}'");
-            //throw new \Exception("trying to set unknown property '{$name}'");
+            throw new \InvalidArgumentException("trying to set unknown property '{$name}'");
         }
         $this->$name = $val;
     }
