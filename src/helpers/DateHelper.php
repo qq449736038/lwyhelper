@@ -3,8 +3,6 @@
 
 namespace lwyhelper\helpers;
 
-use InvalidArgumentException;
-
 class DateHelper
 {
     /**
@@ -61,19 +59,13 @@ class DateHelper
 
     /**
      * DateHelper constructor.
-     * @param mixed $config 数组或者时间戳
-     * @throws \Exception
+     * @param array $config
      */
     public function __construct($config = []){
         if(is_array($config)){
-            try {
-                foreach ($config as $key => $val){
-                    $this->setValue($key,$val);
-                }
-            }catch (\InvalidArgumentException $e){
-                throw new \Exception($e->getMessage());
+            foreach ($config as $key => $val){
+                $this->setValue($key,$val);
             }
-
             //如果没有传入时间戳配置，默认当前时间
             if($this->timestamp  == 0){
                 $this->timestamp = time();
@@ -81,23 +73,22 @@ class DateHelper
         }elseif(is_numeric($config)){
             $this->timestamp = $config;
         }else{
-            throw new InvalidArgumentException('config param except ArrayHelper but give one '.gettype($config));
+            throw new \InvalidArgumentException('config param except Array but '.gettype($config).' giving');
         }
     }
 
     /**
      * @param array $config
      * @return false|int|string
-     * @throws \Exception
      */
     public static function now($config = []){
-        try{
-            return (new self($config))->result();
-        }catch (\InvalidArgumentException $e) {
-            throw new \InvalidArgumentException('错误');
-        }
+        return (new self($config))->result();
     }
 
+    /**
+     * @param $name
+     * @param $val
+     */
     private function setValue($name,$val){
         if(!property_exists($this,$name)){
             throw new \InvalidArgumentException("trying to set unknown property '{$name}'");
