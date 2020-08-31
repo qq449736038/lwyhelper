@@ -55,7 +55,7 @@ class DateHelper
      */
     private $out = 'ymdhis';
 
-    private $outTimestamp = false;
+    private $isOutTimestamp = false;
 
     /**
      * DateHelper constructor.
@@ -79,7 +79,7 @@ class DateHelper
 
     /**
      * @param array $config
-     * @return false|int|string
+     * @return int|string
      */
     public static function now($config = []){
         return (new self($config))->result();
@@ -177,9 +177,13 @@ class DateHelper
         return $this;
     }
 
+    /**
+     * @param int $timestamp
+     * @return int|string
+     */
     private function result($timestamp = 0){
         if(!$timestamp) $timestamp = $this->timestamp;
-        if($this->outTimestamp){
+        if($this->isOutTimestamp){
             return $timestamp;
         }
         return date($this->outputFormatter(),$timestamp);
@@ -210,7 +214,84 @@ class DateHelper
     }
 
     private function getTimestamp(){
-        $this->outTimestamp = true;
+        $this->isOutTimestamp = true;
+    }
+
+    public function shift($str){
+        $str = explode(' ',strtolower(trim($str)));
+        $formatStr = [];
+        foreach ($str as $s){
+            $type = $s[strlen($s)-1];
+            $val = substr($s,0,-1);
+            if(!is_numeric($val)){
+                throw new \InvalidArgumentException('the value mast be a number but '.$val.' giving');
+            }
+            switch ($type){
+                case 'y':array_push($formatStr,$val,'year');break;
+                case 'm':array_push($formatStr,$val,'month');break;
+                case 'd':array_push($formatStr,$val,'day');break;
+                case 'h':array_push($formatStr,$val,'hour');break;
+                case 'i':array_push($formatStr,$val,'minute');break;
+                case 's':array_push($formatStr,$val,'second');break;
+                case 'w':array_push($formatStr,$val,'week');break;
+            }
+        }
+        return $this->result(strtotime(implode(' ',$formatStr),$this->timestamp));
+    }
+
+    public function lastMonday(){
+        return $this->result(strtotime('last monday',$this->timestamp));
+    }
+
+    public function lastSunday(){
+        return $this->result(strtotime('last sunday',$this->timestamp));
+    }
+
+    public function lastMonthBegin(){
+        $time = strtotime(date('Y-m',$this->timestamp).' -1 month');
+        return $this->result($time);
+    }
+
+    public function lastMonthEnd(){
+        $time = strtotime(date('Y-m',$this->timestamp).' -1 second');
+        return $this->result($time);
+    }
+
+    public function lastYearBegin(){
+        $time = strtotime(date('Y-01-01',$this->timestamp).' -1 year');
+        return  $this->result($time);
+    }
+
+    public function lastYearEnd(){
+        $time = strtotime(date('Y-12-31 23:59:59',$this->timestamp).' -1 year');
+        return  $this->result($time);
+    }
+
+    public function nextMonday(){
+        return $this->result(strtotime('next monday',$this->timestamp));
+    }
+
+    public function nextSunday(){
+        return $this->result(strtotime('next sunday',$this->timestamp));
+    }
+
+    public function nextMonthBegin(){
+        $time = strtotime(date('Y-m',$this->timestamp).' +1 month');
+        return $this->result($time);
+    }
+
+    public function nextMonthEnd(){
+        $time = strtotime(date('Y-m',$this->timestamp).' +2 month -1 second');
+        return $this->result($time);
+    }
+
+    public function nextYearBegin(){
+        $time = strtotime(date('Y-01-01',$this->timestamp).' +1 year');
+        return  $this->result($time);
+    }
+    public function nextYearEnd(){
+        $time = strtotime(date('Y-12-31 23:59:59',$this->timestamp).' +1 year');
+        return  $this->result($time);
     }
 
 }
